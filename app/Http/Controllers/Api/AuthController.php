@@ -161,7 +161,6 @@ class AuthController extends Controller
                 ]);
             }
 
-
         }
     }
 
@@ -209,7 +208,6 @@ class AuthController extends Controller
         }
     }
     }
-
     
     // Reset Password for customer
     public function resetPassword(Request $request)

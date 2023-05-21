@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
 use App\Shop\Cart\Cart;
+use App\Shop\Wishlist\Wishlist;
 
 class UserDashboardController extends Controller
 {
@@ -61,7 +62,6 @@ class UserDashboardController extends Controller
                 ]);
             }
             else{
-                // print_r($data); die;
                 
                 $last_id = Cart::insertGetId($data);
                 if($last_id){
@@ -121,4 +121,86 @@ class UserDashboardController extends Controller
             ]);
         }
     }
+
+    public function productAddToWishlist(Request $request)
+    {
+        // print_r('Yes'); die;
+        $header = $request->header('Authorization');
+     
+        if($header){
+            $data = $request->all();
+
+
+            if($data['user_id']=='' || $data['product_id']==''){
+
+                return response()->json([
+                    "status" => "0",
+                    "message" => "Missing Parameters. User ID, Product ID are mendatory"
+                    
+                ]);
+            }
+            else{
+
+                $data['user_shop_id'] = 1;
+                
+                $last_id = Wishlist::insertGetId($data);
+                if($last_id){
+                    return response()->json([
+                        "status" => "1",
+                        "message" => "Product add to wishlist successfully.",
+                        
+                    ]);
+                }
+                else{
+                    return response()->json([
+                        "status" => "0",
+                        "message" => "Something went wrong."
+                    ]);
+                }
+            }
+           
+        }
+        else{
+            return response()->json([
+                "status" => "400",
+                "message" => "Bad Request. Access token required",
+            ]);
+        }
+    }
+
+    
+    public function userWishlistProducts(Request $request, $userid)
+    {
+        $header = $request->header('Authorization');
+     
+        if($header){
+            
+            $cartProducts = Cart::JOIN('products', 'products.id', 'carts.product_id')->where('carts.user_id',$userid)->get(['carts.*','products.name as product_name','products.slug as product_slug','products.cover']);
+            // print_r('123'); die;
+               
+                if($cartProducts){
+                    return response()->json([
+                        "status" => "1",
+                        "message" => "Cart products fetched successfully.",
+                        "data" => $cartProducts
+                        
+                    ]);
+                }
+                else{
+                    return response()->json([
+                        "status" => "0",
+                        "message" => "Something went wrong."
+                    ]);
+                }
+            
+        }
+        else{
+            return response()->json([
+                "status" => "400",
+                "message" => "Bad Request. Access token required",
+            ]);
+        }
+    }
+
+
 }
