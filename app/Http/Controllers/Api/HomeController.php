@@ -39,12 +39,12 @@ class HomeController extends Controller
                         "category_slug" => $child_cat->slug ?? '',
                     ]);
                 }
-                $parent2 = [
+                $parent2 = [[
                     "category_id" => $sub_cat->id,
                     "category_name" => $sub_cat->name ?? '',
                     "category_slug" => $sub_cat->slug ?? '',
                     "child" => $parent3
-                ];
+                ]];
             }
 
             $parent1= [
@@ -56,6 +56,8 @@ class HomeController extends Controller
           
             array_push($products,$parent1);
         }
+
+        // print_r($products); die;
 
         return response()->json([
             "status" => 1,
