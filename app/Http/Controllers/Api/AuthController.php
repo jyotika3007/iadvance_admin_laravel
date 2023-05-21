@@ -49,6 +49,12 @@ class AuthController extends Controller
                         'message' => 'Your account is blocked.',
                     ]);
                 }
+                else{
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Invalid credentials.',
+                    ]);
+                }
             } else
                 return response()->json([
                     'status' => 0,
@@ -85,6 +91,8 @@ class AuthController extends Controller
             } else {
 
                 $data['status'] = 1;
+                $data['password'] = Hash::make($data['password']);
+                $data['user_role'] = 'customer';
 
                 $userId = User::insertGetId($data);
 
