@@ -71,7 +71,6 @@ class HomeController extends Controller
         $sliders = Slider::where('status',1)->where('type','slider')->get(['id','title','cover','priority']);
         // $offers = Product::where('is_trending',1)->get(['id','slug','name','cover','price','sale_price','discount']);
       
-
         $categories = Category::where('parent_id',NULL)->where('status',1)->get();
         $products = [];
         foreach($categories as $cat){
@@ -91,6 +90,7 @@ class HomeController extends Controller
                     $product_count+=$child_cat_product;
                 }
             }
+
             $result = [
                 "category_id" => $cat->id,
                 "category_name" => $cat->name ?? '',
@@ -98,10 +98,11 @@ class HomeController extends Controller
                 "category_cover" => $cat->cover ?? '',
                 "product_count" => $product_count
             ];
+
         array_push($products,$result);
+        
         }
             
-
         return response()->json([
             'status' => 1,
             'message' => 'Home page detail fetched successfully',
@@ -115,9 +116,9 @@ class HomeController extends Controller
 
     public function home_products()
     {
-        $sale_products = Product::where('is_top_rated',1)->limit(15)->get(['id','slug','name','cover','price','sale_price','discount']);
-        $new_arrival_products = Product::where('is_trending',1)->limit(15)->get(['id','slug','name','cover','price','sale_price','discount']);
-        $best_seller_products = Product::where('is_best_seller',1)->limit(15)->get(['id','slug','name','cover','price','sale_price','discount']);
+        $sale_products = Product::where('is_top_rated',1)->limit(15)->get(['id','slug','name','cover','price','sale_price','discount','stock_quantity']);
+        $new_arrival_products = Product::where('is_trending',1)->limit(15)->get(['id','slug','name','cover','price','sale_price','discount','stock_quantity']);
+        $best_seller_products = Product::where('is_best_seller',1)->limit(15)->get(['id','slug','name','cover','price','sale_price','discount','stock_quantity']);
 
         return response()->json([
             'status' => 1,

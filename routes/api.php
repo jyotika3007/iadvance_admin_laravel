@@ -44,6 +44,7 @@ Route::namespace('Api')->group(function () {
     Route::get('userCart/{userid}','UserDashboardController@userCartProducts');
     Route::post('addToWishlist','UserDashboardController@productAddToWishlist');
     Route::get('userWishlist/{userid}','UserDashboardController@userWishlistProducts');
+    Route::get('userOrdersList/{userid}','UserDashboardController@getUserOrdersList');
 
 
 });
