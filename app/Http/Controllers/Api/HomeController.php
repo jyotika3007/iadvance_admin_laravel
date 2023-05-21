@@ -18,40 +18,48 @@ class HomeController extends Controller
      */
 
     public function categories(){
-        $categories = Category::where('parent_id',NULL)->where('status',1)->get();
+        $categories = Category::where('parent_id',NULL)->where('status',1)->get(['id','name','slug']);
         $products = [];
+       
         foreach($categories as $cat){
-            $product_count=0;
-            $cat_product = DB::table('category_product')->join('products','products.id','category_product.product_id')->where('products.status',1)->where('category_id',$cat->id)->count();
-            $product_count+=$cat_product;
-            $sub_categories = Category::where('parent_id',$cat->id)->where('status',1)->get();
+            $parent1 = [];
+            $parent2 = [];
+            $parent3 = [];
+           
+            $sub_categories = Category::where('parent_id',$cat->id)->where('status',1)->get(['id','name','slug']);
            
             foreach($sub_categories as $sub_cat){
-                $sub_cat_product = DB::table('category_product')->join('products','products.id','category_product.product_id')->where('products.status',1)->where('category_id',$sub_cat->id)->count();
-                $product_count+=$sub_cat_product;
-
-                $child_categories = Category::where('parent_id',$sub_cat->id)->where('status',1)->get();
-           
+              
+                $child_categories = Category::where('parent_id',$sub_cat->id)->where('status',1)->get(['id','name','slug']);
+                
                 foreach($child_categories as $child_cat){
-                    $child_cat_product = DB::table('category_product')->join('products','products.id','category_product.product_id')->where('products.status',1)->where('category_id',$child_cat->id)->count();
-                    $product_count+=$child_cat_product;
+                    array_push($parent3,[
+                        "category_id" => $child_cat->id,
+                        "category_name" => $child_cat->name ?? '',
+                        "category_slug" => $child_cat->slug ?? '',
+                    ]);
                 }
-            }
-            
-            $result = [
-                    "category_id" => $cat->id,
-                    "category_name" => $cat->name ?? '',
-                    "category_slug" => $cat->slug ?? '',
-                    "category_cover" => $cat->cover ?? '',
-                    "product_count" => $product_count
+                $parent2 = [
+                    "category_id" => $sub_cat->id,
+                    "category_name" => $sub_cat->name ?? '',
+                    "category_slug" => $sub_cat->slug ?? '',
+                    "child" => $parent3
                 ];
-            array_push($products,$result);
+            }
 
+            $parent1= [
+                "category_id" => $cat->id,
+                "category_name" => $cat->name ?? '',
+                    "category_slug" => $cat->slug ?? '',
+                    "child" => $parent2
+            ];
+          
+            array_push($products,$parent1);
         }
 
         return response()->json([
             "status" => 1,
-            "message" => "Explore Categories fetched successfully.",
+            "message" => "Categories fetched successfully.",
             "data" => $products
         ]);
     }
@@ -120,72 +128,4 @@ class HomeController extends Controller
         ]);
     }
 
-   
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

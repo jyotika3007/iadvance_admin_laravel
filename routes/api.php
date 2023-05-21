@@ -33,4 +33,15 @@ Route::namespace('Api')->group(function () {
     Route::get('home_main','HomeController@home_main');
     Route::get('categoriesList','HomeController@categories');
 
+
+    // Company Detail
+    Route::get('companyDetail','CmsController@companyDetail');
+    
+    
+    //User Dashboard
+    Route::get('userProfile/{userid}','UserDashboardController@userProfile');
+    Route::post('addToCart','UserDashboardController@productAddToCart');
+    Route::get('userCart/{userid}','UserDashboardController@userCartProducts');
+
+
 });
