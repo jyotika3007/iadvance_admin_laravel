@@ -71,7 +71,7 @@
                                             <a href="{{ route('admin.customers.show', $customer['id']) }}" class="btn btn-success btn-sm"><i class="fa fa-eye"></i></a>
                                             @endif -->
                                              <a href="{{ route('admin.customers.show', $customer['id']) }}" class="btn btn-default btn-sm"><i class="fa fa-eye"></i></a>
-                                            <a href="{{ route('admin.customers.edit', $customer['id']) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
+                                            <a href="{{ route('admin.customers.edit', $customer['id']) }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                             <!-- <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete</button> -->
                                         </div>
                                     </form>

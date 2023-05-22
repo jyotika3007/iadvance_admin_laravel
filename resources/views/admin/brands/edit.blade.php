@@ -5,12 +5,16 @@
     <section class="content">
         @include('layouts.errors-and-messages')
         <div class="box">
+
+        
+        <div class="form-title">
+            <h3>Brands >> Edit Brand</h3>
+        </div>
+
             <form action="{{ route('admin.brands.update', $brand->id) }}" method="post" class="form" enctype="multipart/form-data">
                 <div class="box-body">
                     {{ csrf_field() }}
 
-                     <h3>Edit Brand</h3>
-                <br>
                     <input type="hidden" name="_method" value="put">
                     <div class="form-group">
                         <label for="name">Name <span class="text-danger">*</span></label>

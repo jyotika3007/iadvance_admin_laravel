@@ -34,6 +34,10 @@ Route::namespace('Api')->group(function () {
     Route::get('categoriesList','HomeController@categories');
 
 
+    //Categorywise Products Api
+    Route::get('categoryProducts/{id}','CategoryProductController@index');
+
+
     // Company Detail
     Route::get('companyDetail','CmsController@companyDetail');
     

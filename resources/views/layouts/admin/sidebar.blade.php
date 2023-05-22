@@ -77,8 +77,8 @@ $company = DB::table('company_details')->first();
                     <li><a href="{{ route('admin.products.index') }}"> Products List</a></li>
                     <li><a href="{{ route('admin.categories.index') }}">Categories</a></li>
                     <li><a href="{{ route('admin.brands.index') }}"> Brands</a></li>
-                    <li><a href="{{ route('admin.brands.index') }}"> Attributes</a></li>
-                    <li><a href="{{ route('admin.brands.index') }}"> Reviews</a></li>
+                    <li><a href="{{ route('admin.attributes.index') }}"> Attributes</a></li>
+                    <li><a href="{{ url('admin/product_reviews') }}"> Reviews</a></li>
 <!-- 
                     <li><a href="{{ route('admin.shop_categories.index') }}"> Manage Vendor Categories</a></li>
                     <li><a href="{{ route('admin.registered_shops.index') }}"> Manage Vendors</a></li>
