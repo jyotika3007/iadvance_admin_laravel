@@ -38,6 +38,10 @@ Route::namespace('Api')->group(function () {
     Route::get('categoryProducts/{id}','CategoryProductController@index');
 
 
+    // Product Detail
+    Route::get('productDetail/{id}','ProductController@index');
+
+
     // Company Detail
     Route::get('companyDetail','CmsController@companyDetail');
     

@@ -3,18 +3,30 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Shop\ProductImages\ProductImage;
 use Illuminate\Http\Request;
+use App\Shop\Products\Product;
 
-class Productontroller extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($product_id)
     {
-        //
+        $product = Product::find($product_id);
+        $product_images = ProductImage::where('product_id', $product_id)->get();
+
+        $data['product_detail'] = $product;
+        $data['product_images'] = $product_images;
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Product detail fetched successfully.',
+            'data' => $data
+        ]);
     }
 
     /**

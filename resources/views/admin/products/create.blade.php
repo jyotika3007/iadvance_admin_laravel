@@ -99,8 +99,6 @@
                     </div>
                 </div>
 
-                
-
               
                 <div class="cardDiv">
                     <div class="form-title">
@@ -109,7 +107,12 @@
                     <br />
                     <div class="form-group">
                         <label for="cover">Cover Image</label>
-                        <input type="file" name="cover" id="cover" class="form-control">
+                        <select name="attribute_type" id="attribute_type" class="form-control">
+                            <option value="">Select Attribute</option>
+                            @foreach($attributes as $att)
+
+                            @endforeach
+                        </select>
                     </div>
 
                 </div>
