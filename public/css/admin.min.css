@@ -16614,7 +16614,7 @@ h6,
 }
 
 a {
-  color: #fcca19
+  color: #252323
 }
 
 a:hover,
@@ -16622,7 +16622,7 @@ a:active,
 a:focus {
   outline: none;
   text-decoration: none;
-  color: #72afd2
+  /* color: #72afd2 */
 }
 
 .page-header {
@@ -22959,11 +22959,11 @@ table thead tr {
 
 
 .dataTable tr a {
-  color: #333 !important;
+  /* color: #333 !important; */
   font-weight: bold;
 }
 .dataTable tr a:hover {
-  color: #777 !important;
+  /* color: #777 !important; */
   font-weight: bold;
 }
 
@@ -22978,4 +22978,28 @@ table thead tr {
     padding: 15px;
     background-color: #fff;
 
+}
+
+.m-10{
+  margin: 10px
+}
+
+.adminDashboardCard i{
+  font-size: 22px;
+  color: #fcca19;
+}
+.adminDashboardCard {
+  display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.dashboard__inner thead tr {
+  background-color: #fff !important;
+}
+
+.textWhite{
+  color: #fff !important
 }

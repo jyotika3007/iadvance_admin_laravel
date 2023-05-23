@@ -15,7 +15,7 @@ class CmsController extends Controller
      */
     public function companyDetail()
     {
-        $cms = CompanyDetail::first(['id', 'company_name',"country", "state","city","pincode","address","contact","contact_email","company_logo"]);
+        $cms = CompanyDetail::first(['id', 'company_name',"country", "state","city","pincode","address","contact","contact_email","company_logo", 'google_url', 'twitter_url', 'linked_in_url', 'pinterest_url', 'youtube_url', 'instagram_url']);
 
         return response()->json([
             "status" => 1,

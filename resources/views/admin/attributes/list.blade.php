@@ -57,11 +57,9 @@
                                 {{ csrf_field() }}
                                 <input type="hidden" name="_method" value="delete">
                                 <div class="btn-group">
-                                    
-                                    <a href="{{ route('admin.attributes.edit', $attribute->id) }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-                                    <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button>
+                                    <a href="{{ url('admin/attribute-values/add/'.$attribute->id) }}" class="btn btn-success btn-sm textWhite"><i class="fa fa-plus textWhite"></i> &nbsp;Add Value</a>
                                 </div>
-                            </form>
+                                </form>
                         </td>
                     </tr>
                 @endforeach

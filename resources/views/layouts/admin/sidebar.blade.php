@@ -176,7 +176,7 @@ $company = DB::table('company_details')->first();
 
 
             <!-- For Online Transactions -->
-            <li><a href="{{ route('admin.online_transactions') }}" class="side-menu"> <i class="fa fa-money"></i> Online Transcations</a></li>
+            <!-- <li><a href="{{ route('admin.online_transactions') }}" class="side-menu"> <i class="fa fa-money"></i> Online Transcations</a></li> -->
 
 
             <!-- For Settings -->

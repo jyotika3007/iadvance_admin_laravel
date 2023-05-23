@@ -197,13 +197,15 @@ public function vendor_products()
         }
 
             $categories = $this->getCategories();
+            $attributes = Attribute::all();
 
         return view('admin.products.create', [
             'categories' => $categories,
             'brands' => $brands,
             'default_weight' => env('SHOP_WEIGHT'),
             'weight_units' => Product::MASS_UNIT,
-            'product' => new Product
+            'product' => new Product,
+            'attributes' => $attributes
         ]);
     }
 
@@ -217,17 +219,19 @@ public function vendor_products()
     public function store(Request $request)
     {
         $data = $request->except('_token', '_method','units');
+        
+        // print_r(1); die;
 
-        $units = $request->units ?? '';
-        $weights = $request->weights ?? '';
-        $weight_prices = $request->weight_prices ?? '';
+        // $units = $request->units ?? '';
+        // $weights = $request->weights ?? '';
+        // $weight_prices = $request->weight_prices ?? '';
 
-        $sizes = $data['size'];
-        $prices = $data['product_prices'];
+        $sizes = $data['size'] ?? 0;
+        $prices = $data['product_prices']  ?? 0;
 
-        if(count($data['size'])>0){
-            $data['size'] = implode(',',$data['size']);
-        }
+        // if(count($data['size'])>0){
+        //     $data['size'] = implode(',',$data['size']);
+        // }
 
         $data['slug'] = str_replace(' ', '-', $request->input('name'));
 
@@ -247,6 +251,7 @@ public function vendor_products()
         $data['sku'] = "SKU".rand(10,999999999);
 
         $lastProduct = Product::create($data);
+        // print_r(1); die;
 
         if ($request->hasFile('image')) {
             $images = $request->image;
@@ -267,45 +272,45 @@ public function vendor_products()
             }
         }
 
-        if ($request->has('categories')) {
-            foreach($request->categories as $cat)
-                $proCat = DB::table('category_product')->insert([
-                    'product_id' => $lastProduct->id,
-                    'category_id' => $cat
-                ]);
+        // if ($request->has('categories')) {
+        //     foreach($request->categories as $cat)
+        //         $proCat = DB::table('category_product')->insert([
+        //             'product_id' => $lastProduct->id,
+        //             'category_id' => $cat
+        //         ]);
 
-        }        
+        // }        
 
-        if(!empty($data['size']) and count($sizes)>0){
+        // if(!empty($data['size']) and count($sizes)>0){
 
-            foreach($sizes as $key => $value){
+        //     foreach($sizes as $key => $value){
 
-                $newData = new ProductSize;
+        //         $newData = new ProductSize;
 
-                $newData->product_id = $lastProduct->id;
-                $newData->product_size = $value;
-                $newData->product_price = $prices[$key];
+        //         $newData->product_id = $lastProduct->id;
+        //         $newData->product_size = $value;
+        //         $newData->product_price = $prices[$key];
 
-                $newData->save();
+        //         $newData->save();
 
-            } 
-        } 
+        //     } 
+        // } 
 
-        if(!empty($request->weights[0])){
+        // if(!empty($request->weights[0])){
 
-            foreach($weights as $key => $value){
+        //     foreach($weights as $key => $value){
 
-                $newData = new ProductWeight;
+        //         $newData = new ProductWeight;
 
-                $newData->product_id = $lastProduct->id;
-                $newData->product_weight = $value;
-                $newData->product_price = $weight_prices[$key];
-                $newData->weight_unit = $units[$key];
+        //         $newData->product_id = $lastProduct->id;
+        //         $newData->product_weight = $value;
+        //         $newData->product_price = $weight_prices[$key];
+        //         $newData->weight_unit = $units[$key];
 
-                $newData->save();
-            } 
+        //         $newData->save();
+        //     } 
 
-        }
+        // }
 
         return redirect()->route('admin.products.index', $lastProduct->id)->with('message', 'Create successful');
     }

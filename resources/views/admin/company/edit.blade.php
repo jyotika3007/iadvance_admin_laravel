@@ -29,7 +29,7 @@
                         </div>
 
                         <div class="form-group">
-                            <img src="{{ asset('storage/'.$company_detail->company_logo) }}" style="height: 150px; width: auto">
+                            <img src="{{ asset('storage/'.$company_detail->company_logo) }}" style="height: 100px; width: auto">
                         </div>
 
                         <div class="form-group">

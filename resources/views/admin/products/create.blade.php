@@ -29,6 +29,7 @@
 
                 </div>
 
+
                 <div class="cardDiv">
                     <div class="form-title">
                         <h3>Add Product Detail </h3>
@@ -99,25 +100,46 @@
                     </div>
                 </div>
 
-              
+
                 <div class="cardDiv">
                     <div class="form-title">
                         <h3>Product Attributes </h3>
                     </div>
                     <br />
                     <div class="form-group">
-                        <label for="cover">Cover Image</label>
+                        <label for="cover">
+                            Select Attribute
+                        </label>
                         <select name="attribute_type" id="attribute_type" class="form-control">
                             <option value="">Select Attribute</option>
                             @foreach($attributes as $att)
+                            <option value="{{ $att->id ?? ''}}">{{ $att->name ?? '' }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
 
+
+                <div class="cardDiv">
+                    <div class="form-title">
+                        <h3>Related Attributes </h3>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label for="cover">
+                            Select Attribute
+                        </label>
+                        <select name="attribute_type" id="attribute_type" class="form-control">
+                            <option value="">Select Attribute</option>
+                            @foreach($attributes as $att)
+                            <option value="{{ $att->id ?? ''}}">{{ $att->name ?? '' }}</option>
                             @endforeach
                         </select>
                     </div>
 
                 </div>
 
-              
+
                 <div class="cardDiv">
                     <div class="form-title">
                         <h3>Product Photos </h3>
@@ -135,140 +157,139 @@
                     </div>
                 </div>
 
+
                 <div class="cardDiv">
-                <div class="form-title">
-                    <h3>Search Engine Optimization (SEO) </h3>
-                </div>
-                <br />
-                <div class="form-group">
-                    <label for="meta_title"> Meta Title</label>
-                    <textarea rows="3" name="meta_title" id="meta_title" placeholder="Meta Title" class="form-control"></textarea>
+                    <div class="form-title">
+                        <h3>Search Engine Optimization (SEO) </h3>
+                    </div>
+
+                    <br />
+                    <div class="form-group">
+                        <label for="meta_title"> Meta Title</label>
+                        <textarea rows="3" name="meta_title" id="meta_title" placeholder="Meta Title" class="form-control"></textarea>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="meta_description"> Meta Description</label>
+                        <textarea rows="3" name="meta_description" id="meta_description" placeholder="Meta Description" class="form-control"></textarea>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="search_keywords">Search Keywords</label>
+                        <textarea rows="3" name="search_keywords" id="search_keywords" placeholder="Search Keywords" class="form-control"></textarea>
+                        <p>Use comma (,) as a separator for multiple keywords.</p>
+                    </div>
                 </div>
 
 
-                <div class="form-group">
-                    <label for="meta_description"> Meta Description</label>
-                    <textarea rows="3" name="meta_description" id="meta_description" placeholder="Meta Description" class="form-control"></textarea>
+                <div class="cardDiv">
+                    <div class="form-title">
+                        <h3>Shipping Info </h3>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label for="gst"> GST Percentage</label>
+                        <select name="gst" id="gst" placeholder="GST" class="form-control">
+                            <option value="0">0</option>
+                            <option value="3">3</option>
+                            <option value="5">5</option>
+                            <option value="12">12</option>
+                            <option value="18">18</option>
+                            <option value="28">28</option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="preffered_payment_method">Preferred Payment Method</label>
+                        <select name="preffered_payment_method" id="preffered_payment_method" placeholder="GST" class="form-control">
+                            <option value="both">Both</option>
+                            <option value="COD">COD</option>
+                            <option value="Prepaid">Prepaid</option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="shipping_amount">Shipping Amount</label>
+                        <input type="text" name="shipping_amount" id="shipping_amount" placeholder="Shipping Amount" class="form-control"></textarea>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="delivery_days">Expected Delivery Days</label>
+                        <input type="text" name="delivery_days" id="delivery_days" placeholder="Expected Delivery Days" class="form-control" value="{{ old('delivery_days') }}">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="return_period">Return Period</label>
+                        <select name="return_period" id="return_period" placeholder="GST" class="form-control">
+                            <option value="At a time of delivery">At a time of delivery</option>
+                            <option value="Non Refundable">Non Refundable</option>
+                            <option value="7 Days">7 Days</option>
+                            <option value="15 Days">15 Days</option>
+                            <option value="30 Days">30 Days</option>
+                        </select>
+                    </div>
+
                 </div>
 
 
-                <div class="form-group">
-                    <label for="search_keywords">Search Keywords</label>
-                    <textarea rows="3" name="search_keywords" id="search_keywords" placeholder="Search Keywords" class="form-control"></textarea>
-                    <p>Use comma (,) as a separator for multiple keywords.</p>
+                <div class="cardDiv">
+                    <div class="form-title">
+                        <h3>Shipping Info </h3>
+                    </div>
+                    <br />
+
+                    <div class="form-group">
+                        @include('admin.shared.trending', ['trending' => 0])
+                    </div>
+                    <div class="form-group">
+                        @include('admin.shared.best_seller', ['is_best_seller' => 0])
+                    </div>
+                    <div class="form-group">
+                        @include('admin.shared.top_rated', ['is_top_rated' => 0])
+                    </div>
+
+                    <div class="form-group">
+                        @include('admin.shared.status-select', ['status' => 1])
+                    </div>
                 </div>
+
+
             </div>
-
-            
-
-            <div class="cardDiv">
-                <div class="form-title">
-                    <h3>Shipping Info </h3>
-                </div>
-                <br />
-                <div class="form-group">
-                    <label for="gst"> GST Percentage</label>
-                    <select name="gst" id="gst" placeholder="GST" class="form-control">
-                        <option value="0">0</option>
-                        <option value="3">3</option>
-                        <option value="5">5</option>
-                        <option value="12">12</option>
-                        <option value="18">18</option>
-                        <option value="28">28</option>
-                    </select>
-                </div>
-
-
-                <div class="form-group">
-                    <label for="preffered_payment_method">Preferred Payment Method</label>
-                    <select name="preffered_payment_method" id="preffered_payment_method" placeholder="GST" class="form-control">
-                        <option value="both">Both</option>
-                        <option value="COD">COD</option>
-                        <option value="Prepaid">Prepaid</option>
-                    </select>
-                </div>
-
-
-                <div class="form-group">
-                    <label for="shipping_amount"> Shipping Amount</label>
-                    <input type="text" name="shipping_amount" id="shipping_amount" placeholder="Shipping Amount" class="form-control"></textarea>
-                </div>
-
-
-                <div class="form-group">
-                    <label for="delivery_days">Expected Delivery Days</label>
-                    <input type="text" name="delivery_days" id="delivery_days" placeholder="Expected Delivery Days" class="form-control" value="{{ old('delivery_days') }}">
-                </div>
-
-                <div class="form-group">
-                    <label for="return_period">Return Period</label>
-                    <select name="return_period" id="return_period" placeholder="GST" class="form-control">
-                        <option value="At a time of delivery">At a time of delivery</option>
-                        <option value="Non Refundable">Non Refundable</option>
-                        <option value="7 Days">7 Days</option>
-                        <option value="15 Days">15 Days</option>
-                        <option value="30 Days">30 Days</option>
-                    </select>
-                </div>
-
-
-            </div>
-
-                  
-            <div class="cardDiv">
-                <div class="form-title">
-                    <h3>Shipping Info </h3>
-                </div>
-                <br />
-                
-                <div class="form-group">
-                    @include('admin.shared.trending', ['trending' => 0])
-                </div>
-                <div class="form-group">
-                    @include('admin.shared.best_seller', ['is_best_seller' => 0])
-                </div>
-                <div class="form-group">
-                    @include('admin.shared.top_rated', ['is_top_rated' => 0])
-                </div>
-
-                <div class="form-group">
-                    @include('admin.shared.status-select', ['status' => 1])
-                </div>
-            </div>
-
-
-
-        </div>
-        <div class="col-md-4">
-        <!-- </div>
+            <div class="col-md-4">
+                <!-- </div>
             <h2>Categories</h2>
             @include('admin.shared.categories', ['categories' => $categories, 'selectedIds' => []])
         </div> -->
-        <div class="cardDiv">
-                <div class="form-title">
-                    <h3>Additional Info Info </h3>
+                <div class="cardDiv">
+                    <div class="form-title">
+                        <h3>Additional Info Info </h3>
+                    </div>
+                    <br />
+                    @if(!$brands->isEmpty())
+                    <div class="form-group">
+                        <label for="brand_id">Brand </label>
+                        <select name="brand_id" id="brand_id" class="form-control select2">
+                            <option value=""></option>
+                            @foreach($brands as $brand)
+                            <option @if(old('brand_id')==$brand->id) selected="selected" @endif value="{{ $brand->id }}">{{ $brand->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endif
                 </div>
-                <br />
-        @if(!$brands->isEmpty())
-                <div class="form-group">
-                    <label for="brand_id">Brand </label>
-                    <select name="brand_id" id="brand_id" class="form-control select2">
-                        <option value=""></option>
-                        @foreach($brands as $brand)
-                        <option @if(old('brand_id')==$brand->id) selected="selected" @endif value="{{ $brand->id }}">{{ $brand->name }}</option>
-                        @endforeach
-                    </select>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <div class="btn-group">
+                        <a href="{{ route('admin.products.index') }}" class="btn btn-default">Back</a>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
                 </div>
-                @endif
-        
-        </div>
-        <!-- /.box-body -->
-        <div class="box-footer">
-            <div class="btn-group">
-                <a href="{{ route('admin.products.index') }}" class="btn btn-default">Back</a>
-                <button type="submit" class="btn btn-primary">Create</button>
-            </div>
-        </div>
     </form>
     <!-- </div> -->
     <!-- /.box -->

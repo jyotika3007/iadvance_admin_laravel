@@ -6,11 +6,11 @@
     @include('layouts.errors-and-messages')
     <!-- Default box -->
             <div class="box">
+            <div class="form-title">
+            <h3>Sliders @if(!empty($keyword))  - Search result for - <b><i>"{{ $keyword }}"</i></b> @endif </h3>
+        </div>
                 <div class="box-body">
             
-                    <h3>Sliders @if(!empty($keyword))  - Search result for - <b><i>"{{ $keyword }}"</i></b> @endif </h3>
-
-                    <br>
 
                     <form action="{{route('admin.sliders.search_sliders')}}" method="get">
                     <div class="row"  >

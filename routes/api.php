@@ -53,6 +53,9 @@ Route::namespace('Api')->group(function () {
     Route::post('addToWishlist','UserDashboardController@productAddToWishlist');
     Route::get('userWishlist/{userid}','UserDashboardController@userWishlistProducts');
     Route::get('userOrdersList/{userid}','UserDashboardController@getUserOrdersList');
-
+    Route::post('removeFromWishlist','UserDashboardController@removeFromWishlist');
+    Route::post('removeFromCart','UserDashboardController@removeFromCart');
+    Route::patch('updateUserProfile/{user_id}','UserDashboardController@updateUserProfile');
+    
 
 });

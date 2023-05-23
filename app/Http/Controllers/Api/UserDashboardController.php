@@ -53,29 +53,34 @@ class UserDashboardController extends Controller
         if ($header) {
             $data = $request->all();
 
-            if ($data['user_id'] == '' || $data['product_id'] == '' || $data['quantity'] == '' || $data['unit_price'] == '' || $data['total_price'] == '') {
+            if(count($data)>0){
+                for($i=0 ; $i<count($data) ; $i++){
+                    if ($data[$i]['user_id'] == '' || $data[$i]['product_id'] == '' || $data[$i]['quantity'] == '' || $data[$i]['unit_price'] == '' || $data[$i]['total_price'] == '') {
 
-                return response()->json([
-                    "status" => "0",
-                    "message" => "Missing Parameters. User ID, Product Id, Product Quantity, Unit Price & Total Price are mendatory"
-
-                ]);
-            } else {
-
-                $last_id = Cart::insertGetId($data);
-                if ($last_id) {
-                    return response()->json([
-                        "status" => "1",
-                        "message" => "Product add to cart successfully.",
-
-                    ]);
-                } else {
-                    return response()->json([
-                        "status" => "0",
-                        "message" => "Something went wrong."
-                    ]);
+                        return response()->json([
+                            "status" => "0",
+                            "message" => "Missing Parameters. User ID, Product Id, Product Quantity, Unit Price & Total Price are mendatory"
+        
+                        ]);
+                    } else {
+        
+                        $last_id = Cart::insertGetId($data[$i]);
+                        if ($last_id) {
+                            return response()->json([
+                                "status" => "1",
+                                "message" => "Product add to cart successfully.",
+        
+                            ]);
+                        } else {
+                            return response()->json([
+                                "status" => "0",
+                                "message" => "Something went wrong."
+                            ]);
+                        }
+                    }
                 }
             }
+
         } else {
             return response()->json([
                 "status" => "400",
@@ -118,7 +123,7 @@ class UserDashboardController extends Controller
 
     public function productAddToWishlist(Request $request)
     {
-    
+
         $header = $request->header('Authorization');
 
         if ($header) {
@@ -130,20 +135,18 @@ class UserDashboardController extends Controller
                     "status" => "0",
                     "message" => "Missing Parameters. User ID, Product ID are mendatory"
                 ]);
-
             } else {
 
                 $data['user_shop_id'] = 1;
 
-                $checWishlist = Wishlist::where('product_id',$data['product_id'])->where('user_id',$data['user_id'])->first();
+                $checWishlist = Wishlist::where('product_id', $data['product_id'])->where('user_id', $data['user_id'])->first();
 
-                if($checWishlist){
+                if ($checWishlist) {
                     return response()->json([
                         "status" => "0",
                         "message" => "Product already in your wishlist."
                     ]);
-                }
-                else{
+                } else {
 
                     $last_id = Wishlist::insertGetId($data);
                     if ($last_id) {
@@ -157,9 +160,7 @@ class UserDashboardController extends Controller
                             "message" => "Something went wrong."
                         ]);
                     }
-    
                 }
-
             }
         } else {
             return response()->json([
@@ -176,7 +177,7 @@ class UserDashboardController extends Controller
 
         if ($header) {
 
-            $cartProducts = Wishlist::JOIN('products', 'products.id', 'wishlists.product_id')->where('wishlists.user_id', $userid)->get(['wishlists.*', 'products.name as product_name', 'products.slug as product_slug', 'products.cover']);
+            $cartProducts = Wishlist::JOIN('products', 'products.id', 'wishlists.product_id')->where('wishlists.user_id', $userid)->get(['wishlists.*', 'products.name as product_name', 'products.slug as product_slug', 'products.cover', 'products.price', 'products.stock_quantity']);
 
             if ($cartProducts) {
                 return response()->json([
@@ -190,7 +191,6 @@ class UserDashboardController extends Controller
                     "message" => "Something went wrong."
                 ]);
             }
-
         } else {
             return response()->json([
                 "status" => "400",
@@ -200,9 +200,76 @@ class UserDashboardController extends Controller
     }
 
 
-    public function getUserOrdersList(Request $request, $userid){
-        
-        $orders = Order::where('customer_id',$userid)->orderBy('id','DESC')->get();
+    public function removeFromCart(Request $request)
+    {
+        $header = $request->header('Authorization');
+
+        if ($header) {
+            $data = $request->all();
+
+            $cart = Cart::find($data['cart_id']);
+            // print_r($cart); die;
+
+            $cart->delete();
+            return response()->json([
+                'status' => 1,
+                'message' => 'Product removed from cart successfully.'
+            ]);
+        } else {
+            return response()->json([
+                "status" => "400",
+                "message" => "Bad Request. Access token required",
+            ]);
+        }
+    }
+
+
+    public function removeFromWishlist(Request $request)
+    {
+        $header = $request->header('Authorization');
+
+        if ($header) {
+            $data = $request->all();
+            $wishlist = Wishlist::find($data['wishlist_id']);
+            $wishlist->delete();
+            return response()->json([
+                'status' => 1,
+                'message' => 'Product removed from wishlist successfully.'
+            ]);
+        } else {
+            return response()->json([
+                "status" => "400",
+                "message" => "Bad Request. Access token required",
+            ]);
+        }
+    }
+
+
+    public function updateUserProfile(Request $request, $user_id)
+    {
+        $header = $request->header('Authorization');
+
+        if ($header) {
+            $data = $request->all();
+            $cart = User::where('id', $user_id)->update($data);
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Profile detail updated successfully.'
+            ]);
+        } else {
+            return response()->json([
+                "status" => "400",
+                "message" => "Bad Request. Access token required",
+            ]);
+        }
+    }
+
+
+    public function getUserOrdersList(Request $request, $userid)
+    {
+
+        $orders = Order::where('customer_id', $userid)->orderBy('id', 'DESC')->get();
 
         return response()->json([
             "status" => 1,
@@ -210,10 +277,8 @@ class UserDashboardController extends Controller
             "data" => $orders
         ]);
 
-        print_r($orders);die;
-        $items = DB::table('order_product')->JOIN('products','products.id','order_product.product_id')->where('order_product.order_id',$orderId)->select('products.cover','products.description','order_product.*')->get();
-        
+        print_r($orders);
+        die;
+        $items = DB::table('order_product')->JOIN('products', 'products.id', 'order_product.product_id')->where('order_product.order_id', $orderId)->select('products.cover', 'products.description', 'order_product.*')->get();
     }
-
-
 }

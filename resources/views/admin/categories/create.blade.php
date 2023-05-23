@@ -9,15 +9,13 @@
 
         
         <div class="form-title">
-            <h3>Categories >> Add Category</h3>
+            <h3>Categories >> Add Category @if(!empty($parent_category)) {{ ' Under' }} <i><b>'{{ $parent_category->name ?? '' }}' @endif</b></i></h3>
         </div>
 
             <form action="{{ route('admin.categories.store') }}" method="post" class="form" enctype="multipart/form-data">
                 <div class="box-body">
                     {{ csrf_field() }}
                     
-                    
-                <h3>Add New Category @if(!empty($parent_category)) {{ ' Under' }} <i><b>'{{ $parent_category->name ?? '' }}' @endif</b></i></h3>
                 <br>
                     <div class="form-group" @if($parent_id>0){{ 'style=display:none;' }}@endif>
                         <label for="parent">Parent Category</label>

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
-   
+
     use AuthenticatesUsers;
 
     public function __construct()
@@ -40,7 +40,8 @@ class AuthController extends Controller
                     return response()->json([
                         'status' => 1,
                         'message' => 'Login successful.',
-                        'access-token' => $token
+                        'access-token' => $token,
+                        'user_id' => Auth::user()->id
 
                     ]);
                 } elseif (Auth::user()->status == 0 || Auth::user()->account_status == 'Ban') {
@@ -48,8 +49,7 @@ class AuthController extends Controller
                         'status' => 0,
                         'message' => 'Your account is blocked.',
                     ]);
-                }
-                else{
+                } else {
                     return response()->json([
                         'status' => 0,
                         'message' => 'Invalid credentials.',
@@ -68,7 +68,7 @@ class AuthController extends Controller
         }
     }
 
-    
+
     // Post Register Api for customers
     public function postRegister(Request $request)
     {
@@ -120,112 +120,112 @@ class AuthController extends Controller
         }
     }
 
-   
+
     // Verify OTP for customers
     public function verifyOtp(Request $request)
     {
         $data = $request->all();
 
-        if($data['email']=='' || $data['otp']==''){
+        if ($data['email'] == '' || $data['otp'] == '') {
             return response()->json([
                 'status' => 0,
                 'message' => 'Email or OTP missing.',
             ]);
-        }
-        else{
-            $checkOtp = DB::table('email_verifications')->where('email',$data['email'])->get()->last();
+        } else {
+            $checkOtp = DB::table('email_verifications')->where('email', $data['email'])->get()->last();
 
-            if($checkOtp->verified==0){
-                if($checkOtp->otp == $data['otp']){
-                    DB::table('email_verifications')->where('id',$checkOtp->id)->update(['verified'=>1]);
+            if ($checkOtp->verified == 0) {
+                if ($checkOtp->otp == $data['otp']) {
+                    DB::table('email_verifications')->where('id', $checkOtp->id)->update(['verified' => 1]);
 
-                    User::where('email',$data['email'])->update(['account_status' => 'Active']);
+                    User::where('email', $data['email'])->update(['account_status' => 'Active']);
                     // print_r($checkOtp->id); die;
                     return response()->json([
                         'status' => 1,
                         'message' => 'OTP Verified. Successfully Registered',
                     ]);
-                }
-                else{
+                } else {
                     return response()->json([
                         'status' => 0,
                         'message' => 'Invalid OTP.',
                     ]);
                 }
-            }
-
-            else{
+            } else {
                 return response()->json([
                     'status' => 0,
                     'message' => 'Invalid Request.',
                 ]);
             }
-
         }
     }
 
 
     // Forgot Password to send a link on mail
-    public function forgotPassword(Request $request){
-        if($request->email==''){
+    public function forgotPassword(Request $request)
+    {
+        if ($request->email == '') {
             return response()->json([
                 'status' => 0,
                 'message' => 'Email Id is required',
             ]);
-        }
-        else{
+        } else {
             $checkUser = User::where('email', $request->email)->first();
             // print_r($checkUser); die;
-            if($checkUser){
+            if ($checkUser) {
 
-            if($checkUser->status==1){
+                if ($checkUser->status == 1) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Reset Password Link is send to your email id.',
+                    ]);
+                } else {
+                    if ($checkUser->status == 0 && $checkUser->account_status == 'Active') {
+                        return response()->json([
+                            'status' => 0,
+                            'message' => 'This email id is blocked.',
+                        ]);
+                    } else {
+                        return response()->json([
+                            'status' => 0,
+                            'message' => 'Invalid Request',
+                        ]);
+                    }
+                }
+            } else {
                 return response()->json([
                     'status' => 0,
-                    'message' => 'Reset Password Link is send to your email id.',
+                    'message' => 'Invalid email id.',
                 ]);
             }
-            else{
-                if($checkUser->status == 0 && $checkUser->account_status=='Active'){
-                    return response()->json([
-                        'status' => 0,
-                        'message' => 'This email id is blocked.',
-                    ]);
-                }
-                else{
-                    return response()->json([
-                        'status' => 0,
-                        'message' => 'Invalid Request',
-                    ]);
-                }
-            }
-        }
-        
-        else{
-            return response()->json([
-                'status' => 0,
-                'message' => 'Invalid email id.',
-            ]);
         }
     }
-    }
-    
+
     // Reset Password for customer
     public function resetPassword(Request $request)
     {
-        if($request->email=='' && $request->password==''){
-            return response()->json([
-                'status' => 1,
-                'message' => 'Email & Password both are mendatory.',
-            ]);
-        }
-        else{
-            User::where('email',$request->email)->update('password',Hash::make($data['password']));
-            return response()->json([
-                'status' => 1,
-                'message' => 'Password updated successfully.',
-            ]);
-        }
-        
-    }
+        $header = $request->header('Authorization');
 
+        if ($header) {
+            $data = $request->all();
+            
+            if ($data['user_id'] == '' && $data['password'] == '') {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Email & Password both are mendatory.',
+                ]);
+            } else {
+                User::where('id', $data['user_id'])->update(['password'=>Hash::make($data['password'])]);
+            // print_r($data); die;
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Password updated successfully.',
+                ]);
+            }
+        } else {
+            return response()->json([
+                "status" => "400",
+                "message" => "Bad Request. Access token required",
+            ]);
+        }
+    }
 }
